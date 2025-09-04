@@ -7,7 +7,7 @@ export class ServerRouter extends BaseRouter {
   #currentUrl = "/";
   #origin = "http://localhost";
 
-  constructor(baseUrl = "") {
+  constructor(baseUrl) {
     super(baseUrl);
   }
 

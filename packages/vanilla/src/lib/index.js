@@ -1,4 +1,5 @@
 export * from "./BaseRouter";
+export * from "./createMemoryStorage";
 export * from "./createObserver";
 export * from "./createStorage";
 export * from "./createStore";

@@ -1,13 +1,19 @@
 import { ProductList, SearchBar } from "../components";
-import { productStore } from "../stores";
+import { createMemoryStorage } from "../lib/index.js";
 import { router, withLifecycle } from "../router";
 import { loadProducts, loadProductsAndCategories } from "../services";
+import { productStore } from "../stores";
+import { isSSR } from "../utils/environment.js";
 import { PageWrapper } from "./PageWrapper.js";
 
 export const HomePage = withLifecycle(
   {
     onMount: () => {
-      loadProductsAndCategories();
+      if (isSSR) {
+        createMemoryStorage();
+      } else {
+        loadProductsAndCategories();
+      }
     },
     watches: [
       () => {
@@ -17,9 +23,9 @@ export const HomePage = withLifecycle(
       () => loadProducts(true),
     ],
   },
-  () => {
-    const productState = productStore.getState();
-    const { search: searchQuery, limit, sort, category1, category2 } = router.query;
+  (url, query = router.query, req) => {
+    const productState = isSSR ? req : productStore.getState();
+    const { search: searchQuery, limit, sort, category1, category2 } = isSSR ? query : router.query;
     const { products, loading, error, totalCount, categories } = productState;
     const category = { category1, category2 };
     const hasMore = products.length < totalCount;

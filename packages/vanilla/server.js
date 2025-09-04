@@ -2,6 +2,7 @@ import compression from "compression";
 import express from "express";
 import fs from "node:fs/promises";
 import sirv from "sirv";
+import { server } from "./src/mocks/ssr-server.js";
 
 const prod = process.env.NODE_ENV === "production";
 const port = process.env.PORT || 5173;
@@ -9,6 +10,8 @@ const base = process.env.BASE || (prod ? "/front_6th_chapter4-1/vanilla/" : "/")
 
 // 서버 인스턴스 생성
 const app = express();
+
+server.listen({ onUnhandledRequest: "bypass" });
 
 let vite;
 let template;
@@ -43,7 +46,7 @@ app.get("*all", async (req, res) => {
     }
 
     const renderResult = await render(url, req.query);
-
+    console.log("🎁 renderResult", renderResult);
     const initData = renderResult.initData
       ? `<script>window.__INITIAL_DATA__ = ${JSON.stringify(renderResult.initData)}</script>`
       : "";

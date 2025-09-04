@@ -98,7 +98,7 @@ export class BaseRouter {
    * @param {string} search - location.search 또는 쿼리 문자열
    * @returns {Object} 파싱된 쿼리 객체
    */
-  static parseQuery = (search = window.location.search) => {
+  static parseQuery = (search) => {
     const params = new URLSearchParams(search);
     const query = {};
     for (const [key, value] of params) {
@@ -122,8 +122,8 @@ export class BaseRouter {
     return params.toString();
   };
 
-  static getUrl = (newQuery, baseUrl = "") => {
-    const currentQuery = BaseRouter.parseQuery();
+  static getUrl = (newQuery, baseUrl = "", pathname = "", search = "") => {
+    const currentQuery = BaseRouter.parseQuery(search);
     const updatedQuery = { ...currentQuery, ...newQuery };
 
     // 빈 값들 제거
@@ -134,6 +134,6 @@ export class BaseRouter {
     });
 
     const queryString = BaseRouter.stringifyQuery(updatedQuery);
-    return `${baseUrl}${window.location.pathname.replace(baseUrl, "")}${queryString ? `?${queryString}` : ""}`;
+    return `${baseUrl}${pathname.replace(baseUrl, "")}${queryString ? `?${queryString}` : ""}`;
   };
 }

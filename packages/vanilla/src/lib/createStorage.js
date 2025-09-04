@@ -33,13 +33,3 @@ export const createStorage = (key, storage = window.localStorage) => {
 
   return { get, set, reset };
 };
-
-export const createMemoryStorage = () => {
-  const storage = new Map();
-
-  return {
-    getItem: (key) => storage.get(key),
-    setItem: (key, value) => storage.set(key, value),
-    removeItem: (key) => storage.delete(key),
-  };
-};
